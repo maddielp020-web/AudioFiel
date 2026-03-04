@@ -614,15 +614,17 @@ select:focus {
             return;
         }
         
-        const u = new SpeechSynthesisUtterance(txt);
-        currentUtterance = u;
-        
-        const so = v.options[v.selectedIndex];
-        if (so && so.dataset.voiceIndex) {
-            const vs = ss.getVoices();
-            const vi = parseInt(so.dataset.voiceIndex);
-            if (vs[vi]) u.voice = vs[vi];
-        }
+        // Limpiar el texto de posibles etiquetas HTML (ej: <head>, <body>, etc.)
+const textoLimpio = txt.replace(/<[^>]*>/g, '');
+const u = new SpeechSynthesisUtterance(textoLimpio);  // Usamos el texto limpio
+currentUtterance = u;
+
+const so = v.options[v.selectedIndex];
+if (so && so.dataset.voiceIndex) {
+    const vs = ss.getVoices();
+    const vi = parseInt(so.dataset.voiceIndex);
+    if (vs[vi]) u.voice = vs[vi];
+}
         
         const sp = document.querySelector('input[name="speed"]:checked');
         u.rate = sp ? parseFloat(sp.value) : 1;
